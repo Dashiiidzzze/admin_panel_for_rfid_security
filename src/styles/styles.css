@@ -1,0 +1,187 @@
+/* === ОБЩИЕ СТИЛИ === */
+body {
+    background-image: url('../assets/background.jpg'); /* Путь к картинке */
+    background-size: cover; /* Растягиваем на весь экран */
+    background-position: 0; /* Центрируем */
+    background-attachment: fixed;
+    background-repeat: no-repeat; /* Отключаем повторение */
+    /* background-color: rgb(102, 140, 172); */
+    height: 80vh; /* Растягиваем на всю высоту экрана */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; 
+}
+
+/* === ОСНОВНЫЕ КНОПКИ === */
+div.global-buttons {
+    display: flex;
+    justify-content: flex-start;
+    margin: 20px;
+}
+
+.global-buttons button {
+    display: inline-block;
+    padding: 14px 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+    
+    border: 0;
+    border-radius: 10px;
+    font-size:medium;
+    color: white;
+    background-color: rgb(30, 64, 107);
+}
+
+.global-buttons button:hover {
+    background-color: rgb(15, 32, 54);
+}
+
+/* === ГЛАВНЫЙ ЗАГОЛОВОК === */
+h1 {
+    display: flex;
+    justify-content: center; 
+    font-size: 35px;
+}
+
+/* === СПИСОК СОТРУДНИКОВ === */
+ul {
+    display: grid;
+    padding-left: 0px;
+    justify-content: center; 
+}
+
+li {
+    display: flex;
+    width: 590px;
+    margin-bottom: 10px;
+    padding: 14px 14px;
+    justify-content: space-between;
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 10px;
+    border-color: rgb(102, 140, 172);
+    background-color: white
+    /* border:rgb(15, 32, 54);
+    border-radius: 10px; */
+}
+
+
+a {
+    font-size: 18px;
+    margin-top: 5px;
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    text-decoration: underline;
+    font-weight: bold;
+    color:rgb(15, 32, 54);
+}
+
+button.delete {
+    padding: 5px 10px;
+    border: 0;
+    border-radius: 5px;
+    font-size: 15px;
+    color: white;
+    background-color: rgb(102, 140, 172);
+}
+
+button.delete:hover {
+    background-color: rgb(76, 112, 141);
+}
+
+a.addition {
+    display: flex;
+    margin-left: 50px;
+    justify-content: center;
+    width: 550px;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 10px;
+    font-size: 15px;
+    color: white;
+    background-color: rgb(30, 64, 107);
+}
+
+/* === СПИСОК ПРОХОДОВ === */
+
+.info {
+    margin-top: 5px;
+    justify-content: left;
+}
+
+/* === СОЗДАНИЕ РЕДАКТИРОВАНИЕ КАРТОЧКИ СОТРУДНИКА === */
+form {
+    display: flex;
+    padding: 0px 25px;
+    justify-content: space-between;
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 10px;
+    border-color: rgb(102, 140, 172);
+    background-color: rgb(210, 229, 255);
+}
+
+label {
+    display: flex;
+    justify-content: space-between;
+}
+
+input {
+    width: 220px;
+    margin-left: 5px;
+    border: 1px;
+    border-radius: 5px;
+}
+
+select {
+    margin-left: 5px;
+    border: 0;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.save {
+    margin-bottom: 20px;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 10px;
+    font-size: 15px;
+    color: white;
+    background-color: rgb(30, 64, 107);
+}
+
+.save:hover {
+    background-color: rgb(15, 32, 54);
+}
+
+/* === СТРАНИЦА СХОДА === */
+
+form.login {
+    display: grid;
+    margin-left: 60px;
+    width: 300px;
+    justify-content: center;
+    padding: 20px;
+}
+
+label {
+    margin-bottom: 20px;
+}
+
+.loginsub {
+    padding: 10px 130px;
+    border: 0;
+    border-radius: 10px;
+    font-size: 15px;
+    color: white;
+    background-color: rgb(30, 64, 107);
+}
+
+.loginsub:hover {
+    background-color: rgb(15, 32, 54);
+}

@@ -1,0 +1,74 @@
+{
+  "items": [
+    {
+      "name": "Шелухин Вячеслав Валерьевич",
+      "position": "Дикторыыч",
+      "phone": "9114567890",
+      "keyNumber": "B67890",
+      "zone": {
+        "flightZone": true,
+        "cleanZone": true,
+        "runway": false,
+        "baggageZone": false,
+        "controlTower": true
+      },
+      "id": "2"
+    },
+    {
+      "name": "Юргенсон Ника Олеговна",
+      "position": "пилотввввв",
+      "phone": "78787878787",
+      "keyNumber": "12",
+      "zone": {
+        "flightZone": true,
+        "cleanZone": true,
+        "runway": true,
+        "baggageZone": true,
+        "controlTower": true
+      },
+      "id": "4857"
+    },
+    {
+      "name": "Уженцева Анна Александровна",
+      "position": "стюардесса",
+      "phone": "8787878787",
+      "keyNumber": "13",
+      "zone": {
+        "flightZone": true,
+        "cleanZone": true,
+        "runway": true,
+        "baggageZone": true,
+        "controlTower": false
+      },
+      "id": "2cdd"
+    },
+    {
+      "name": "Потапова Айслана Васильевна",
+      "position": "царица самолетов",
+      "phone": "+7912345678",
+      "keyNumber": "1",
+      "zone": {
+        "flightZone": true,
+        "cleanZone": true,
+        "runway": true,
+        "baggageZone": true,
+        "controlTower": true
+      },
+      "id": "a74a"
+    },
+    {
+      "id": "7fe6",
+      "name": "Болотов Роман Алексеевич",
+      "position": "электрик",
+      "phone": "000",
+      "keyNumber": "1000",
+      "zone": {
+        "flightZone": true,
+        "cleanZone": true,
+        "runway": true,
+        "baggageZone": true,
+        "controlTower": true
+      }
+    }
+  ]
+}
