@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - json-server1
+      - json-server2
+    networks:
+      - app-network
+
+  json-server1:
+    image: clue/json-server
+    container_name: json-server1
+    volumes:
+      - ./db.json:/data/db.json
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    command: ["--watch", "/data/db.json", "--port", "5000"]
+
+  json-server2:
+    image: clue/json-server
+    container_name: json-server2
+    volumes:
+      - ./logs.json:/data/logs.json
+    ports:
+      - "5001:5001"
+    networks:
+      - app-network
+    command: ["--watch", "/data/logs.json", "--port", "5001"]
+
+networks:
+  app-network:
+    driver: bridge

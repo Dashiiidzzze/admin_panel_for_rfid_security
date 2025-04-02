@@ -2,6 +2,7 @@
   "name": "air_transport_safety",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/air_transport_safety/",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",

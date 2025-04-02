@@ -25,7 +25,11 @@ const Logs = () => {
         loadData();
     }, []);
 
-    if (loading) return <p>Загрузка...</p>;
+    if (loading) return (
+        <div className="spinner-container">
+            <div className="spinner"></div>
+        </div>
+    );
 
     return (
         <div>

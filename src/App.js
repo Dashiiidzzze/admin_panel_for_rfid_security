@@ -10,11 +10,6 @@ import PrivateRoute from './components/PrivateRoute';
 import { AuthProvider } from './components/AuthContext'; 
 import './styles/styles.css';  // стили
 
-/* <button id="staffers">Список сотрудников</button>
-        <button id="logs">Логи проходов</button>
-      </GlobalButtons> 
-      
-          <Route path="/path1" element={<Stuffers />} />*/
 const App = () => {
   return (
     <AuthProvider>

@@ -1,20 +1,6 @@
 {
   "items": [
     {
-      "name": "Шелухин Вячеслав Валерьевич",
-      "position": "Дикторыыч",
-      "phone": "9114567890",
-      "keyNumber": "B67890",
-      "zone": {
-        "flightZone": true,
-        "cleanZone": true,
-        "runway": false,
-        "baggageZone": false,
-        "controlTower": true
-      },
-      "id": "2"
-    },
-    {
       "name": "Юргенсон Ника Олеговна",
       "position": "пилотввввв",
       "phone": "78787878787",
@@ -69,6 +55,62 @@
         "baggageZone": true,
         "controlTower": true
       }
+    },
+    {
+      "id": "066b",
+      "name": "Васильева Юлия Вячеславовна",
+      "position": "стюардесса",
+      "phone": "+89231112233",
+      "keyNumber": "123wq",
+      "zone": {
+        "flightZone": true,
+        "cleanZone": true,
+        "runway": true,
+        "baggageZone": false,
+        "controlTower": false
+      }
+    },
+    {
+      "name": "Бочкарев Егор Александрович",
+      "position": "стюардесса",
+      "phone": "89133426789",
+      "keyNumber": "2637",
+      "zone": {
+        "flightZone": false,
+        "cleanZone": false,
+        "runway": false,
+        "baggageZone": true,
+        "controlTower": false
+      },
+      "id": "da36"
+    },
+    {
+      "id": "2402",
+      "name": "Петров Петр рарпрп",
+      "position": "",
+      "phone": "777",
+      "keyNumber": "B67890",
+      "zone": {
+        "flightZone": false,
+        "cleanZone": false,
+        "runway": false,
+        "baggageZone": false,
+        "controlTower": false
+      }
+    },
+    {
+      "name": "Петров Петр",
+      "position": "Пилот",
+      "phone": "99",
+      "keyNumber": "вввв",
+      "zone": {
+        "flightZone": false,
+        "cleanZone": false,
+        "runway": false,
+        "baggageZone": false,
+        "controlTower": false
+      },
+      "id": "377e"
     }
   ]
 }
