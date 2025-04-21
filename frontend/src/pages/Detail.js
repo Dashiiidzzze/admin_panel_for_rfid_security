@@ -28,7 +28,7 @@ const Detail = () => {
     useEffect(() => {
         async function loadItem() {
             try {
-                const response = await getData(`http://localhost:5000/items/${id}`);
+                const response = await getData(`${process.env.REACT_APP_API_URL}/items/${id}`);
                 setItemData(response); // Обновляем состояние
             } catch (error) {
                 console.error("Ошибка загрузки:", error);
@@ -65,7 +65,7 @@ const Detail = () => {
 
         try {
             await updateData(
-                `http://localhost:5000/items/${id}`, JSON.stringify(updatedItem)); // Сериализация объекта в строку JSON
+                `${process.env.REACT_APP_API_URL}/items/${id}`, JSON.stringify(updatedItem)); // Сериализация объекта в строку JSON
             navigate('/');
         } catch (error) {
             console.error("Ошибка обновления:", error);

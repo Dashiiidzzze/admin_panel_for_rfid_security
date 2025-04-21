@@ -10,7 +10,7 @@ const Home = () => {
     useEffect(() => {
         const loadEmployees = async () => {
             try {
-                const employees = await getData("http://localhost:5000/items");
+                const employees = await getData(`${process.env.REACT_APP_API_URL}/items`);
                 setData(employees);
                 setError(null);
             } catch (err) {
@@ -25,7 +25,7 @@ const Home = () => {
 
     const deleteItem = async (id) => {
         try {
-            await deleteData(`http://localhost:5000/items/${id}`);
+            await deleteData(`${process.env.REACT_APP_API_URL}/items/${id}`);
             setData(prevData => prevData.filter(item => item.id !== id));
         } catch (err) {
             setError(err.message);

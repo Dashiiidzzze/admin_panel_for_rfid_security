@@ -11,7 +11,7 @@ const Logs = () => {
     useEffect(() => {
         async function loadData() {
             try {
-                const employees = await getData("http://localhost:5001/logs");
+                const employees = await getData(`${process.env.REACT_APP_API_URL}/logs`);
                 setData(employees); // Обновляем состояние
                 setError(null);
             } catch (error) {
