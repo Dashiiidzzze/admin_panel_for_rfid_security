@@ -1,81 +1,126 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getData, updateData } from '../components/CheckErrors';
 
 const Detail = () => {
-    const { id } = useParams(); // Получаем ID товара из URL
+    const { id } = useParams();
     const navigate = useNavigate();
-    
-    const [itemData, setItemData] = useState({
+    const [positions, setPositions] = useState([]);
+    const [phoneError, setPhoneError] = useState("");
+
+    const [formData, setFormData] = useState({
         name: "",
         position: "",
         phone: "",
         keyNumber: "",
         zone: {
             flightZone: false,
-            cleanZone: false,
-            runway: false,
+            clearZone: false,
+            runaway: false,
             baggageZone: false,
             controlTower: false
         }
     });
-    const nameRef = useRef(null);
-    const positionRef = useRef(null);
-    const phoneRef = useRef(null);
-    const keyNumberRef = useRef(null);
-    
-    // Загружаем товар при монтировании компонента
+
+    // Получаем список должностей
     useEffect(() => {
-        async function loadItem() {
+        const fetchPositions = async () => {
+            try {
+                const data = await getData(`${process.env.REACT_APP_API_URL}/api/positions`);
+                const positionNames = data.dolzhnosti.map(d => d.dolzhnost);
+                setPositions(positionNames);
+            } catch (error) {
+                console.error("Ошибка при получении должностей:", error);
+            }
+        };
+        fetchPositions();
+    }, []);
+
+    // Загружаем данные сотрудника
+    useEffect(() => {
+        const loadItem = async () => {
             try {
                 const response = await getData(`${process.env.REACT_APP_API_URL}/items/${id}`);
-                setItemData(response); // Обновляем состояние
+                const staffData = response.staff[0];
+
+                // Убедимся, что номер телефона — строка и без пробелов
+                setFormData({
+                    ...staffData,
+                    phone: staffData.phone?.toString().trim() || "",
+                    zone: staffData.zone || {
+                        flightZone: false,
+                        clearZone: false,
+                        runaway: false,
+                        baggageZone: false,
+                        controlTower: false
+                    }
+                });
             } catch (error) {
-                console.error("Ошибка загрузки:", error);
+                console.error("Ошибка загрузки данных:", error);
             }
-        }
+        };
         loadItem();
-    }, [id]); // Запускать при изменении `id`
+    }, [id]);
 
-    useEffect(() => {
-        if (nameRef.current) nameRef.current.value = itemData.name || '';
-        if (positionRef.current) positionRef.current.value = itemData.position || '';
-        if (phoneRef.current) phoneRef.current.value = itemData.phone || '';
-        if (keyNumberRef.current) keyNumberRef.current.value = itemData.keyNumber || '';
-    }, [itemData]); // Заполняем input после загрузки данных
+    // Проверка номера телефона: +7 и 10 цифр
+    const validatePhone = (phone) => {
+        const cleaned = phone.trim().replace(/\s+/g, '');
+        const phoneRegex = /^\+7\d{10}$/;
+        return phoneRegex.test(cleaned);
+    };
 
-    const handleZoneChange = (event, zoneKey) => {
-        setItemData(prevData => ({
-            ...prevData,
-            zone: { ...prevData.zone, [zoneKey]: event.target.value === "true" }
+    // Обработка изменений в input'ах
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        if (name === "phone") {
+            setPhoneError("");
+        }
+
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
         }));
     };
 
-    // Функция обновления товара
+    // Обработка переключения доступа к зонам
+    const handleZoneChange = (e, zoneKey) => {
+        const value = e.target.value === "true";
+        setFormData(prev => ({
+            ...prev,
+            zone: {
+                ...prev.zone,
+                [zoneKey]: value
+            }
+        }));
+    };
+
+    // Отправка формы
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const updatedItem = {
-            name: nameRef.current.value,
-            position: positionRef.current.value,
-            phone: phoneRef.current.value,
-            keyNumber: keyNumberRef.current.value,
-            zone: itemData.zone
-        };
+        const cleanedPhone = formData.phone.trim();
+
+        if (!validatePhone(cleanedPhone)) {
+            setPhoneError("Формат телефона должен быть: +7XXXXXXXXXX (11 цифр)");
+            return;
+        }
 
         try {
             await updateData(
-                `${process.env.REACT_APP_API_URL}/items/${id}`, JSON.stringify(updatedItem)); // Сериализация объекта в строку JSON
+                `${process.env.REACT_APP_API_URL}/items/${id}`,
+                JSON.stringify({
+                    ...formData,
+                    phone: cleanedPhone
+                })
+            );
             navigate('/');
         } catch (error) {
-            console.error("Ошибка обновления:", error);
+            console.error("Ошибка при обновлении данных:", error);
         }
     };
 
-    // Проверяем, что itemData и itemData.zone существуют
-    if (!itemData || !itemData.zone) {
-        return <div>Загрузка...</div>; // Можно вернуть компонент "Загрузка", если данные еще не загружены
-    }
+    if (!formData || !formData.zone) return <div>Загрузка...</div>;
 
     return (
         <div>
@@ -83,75 +128,125 @@ const Detail = () => {
             <form onSubmit={handleSubmit}>
                 <div className='inform'>
                     <h3>Общая информация:</h3>
+
                     <label>
                         ФИО:
-                        <input type="text" ref={nameRef} required />
-                    </label>
-                    <br />
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                        />
+                    </label><br />
+
                     <label>
                         Должность:
-                        <input type="text" ref={positionRef} required />
-                    </label>
-                    <br />
+                        <select
+                            name="position"
+                            value={formData.position}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Выберите должность</option>
+                            {positions.map((pos, index) => (
+                                <option key={index} value={pos}>{pos}</option>
+                            ))}
+                        </select>
+                    </label><br />
+
                     <label>
                         Телефон:
-                        <input type="text" ref={phoneRef} required />
+                        <input
+                            type="text"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            required
+                            style={{ 
+                                border: phoneError ? '2px solid red' : '1px solid #ccc',
+                                outline: 'none'
+                            }}
+                        />
                     </label>
+                    {phoneError && <div style={{color: 'red', fontSize: '0.8em', marginTop: '5px'}}>{phoneError}</div>}
                     <br />
+
                     <label>
                         Номер ключа:
-                        <input type="text" ref={keyNumberRef} required />
-                    </label>
-                    <br />
+                        <input
+                            type="text"
+                            name="keyNumber"
+                            value={formData.keyNumber}
+                            onChange={handleChange}
+                            required
+                        />
+                    </label><br />
+
                     <button className='save' type="submit">Сохранить</button>
                 </div>
 
                 <div className='zones'>
                     <h3>Доступ в зоны:</h3>
+
                     <label>
                         Зона вылета/прилета:
-                        <select value={itemData.zone.flightZone} onChange={(e) => handleZoneChange(e, "flightZone")}>
+                        <select
+                            value={formData.zone.flightZone}
+                            onChange={(e) => handleZoneChange(e, "flightZone")}
+                        >
                             <option value="true">Да</option>
                             <option value="false">Нет</option>
                         </select>
-                    </label>
-                    <br />
+                    </label><br />
+
                     <label>
                         Чистая зона:
-                        <select value={itemData.zone.cleanZone} onChange={(e) => handleZoneChange(e, "cleanZone")}>
+                        <select
+                            value={formData.zone.clearZone}
+                            onChange={(e) => handleZoneChange(e, "clearZone")}
+                        >
                             <option value="true">Да</option>
                             <option value="false">Нет</option>
                         </select>
-                    </label>
-                    <br />
+                    </label><br />
+
                     <label>
                         Взлетно-посадочная полоса:
-                        <select value={itemData.zone.runway} onChange={(e) => handleZoneChange(e, "runway")}>
+                        <select
+                            value={formData.zone.runaway}
+                            onChange={(e) => handleZoneChange(e, "runaway")}
+                        >
                             <option value="true">Да</option>
                             <option value="false">Нет</option>
                         </select>
-                    </label>
-                    <br />
+                    </label><br />
+
                     <label>
                         Зона обслуживания багажа:
-                        <select value={itemData.zone.baggageZone} onChange={(e) => handleZoneChange(e, "baggageZone")}>
+                        <select
+                            value={formData.zone.baggageZone}
+                            onChange={(e) => handleZoneChange(e, "baggageZone")}
+                        >
                             <option value="true">Да</option>
                             <option value="false">Нет</option>
                         </select>
-                    </label>
-                    <br />
+                    </label><br />
+
                     <label>
                         Диспетчерская:
-                        <select value={itemData.zone.controlTower} onChange={(e) => handleZoneChange(e, "controlTower")}>
+                        <select
+                            value={formData.zone.controlTower}
+                            onChange={(e) => handleZoneChange(e, "controlTower")}
+                        >
                             <option value="true">Да</option>
                             <option value="false">Нет</option>
                         </select>
-                    </label>
-                    <br />
+                    </label><br />
                 </div>
             </form>
         </div>
     );
-}
+};
 
-export default Detail
+export default Detail;

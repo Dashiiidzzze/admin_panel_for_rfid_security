@@ -16,7 +16,7 @@ RUN go mod download
 COPY . ./
 
 # Собираем бинарный файл приложения
-RUN go build -o main ./cmd/main.go
+RUN go build -o main ./cmd/air_safety/main.go
 
 # Указываем порт, который будет использовать приложение
 EXPOSE 8080

@@ -11,7 +11,7 @@ const Home = () => {
         const loadEmployees = async () => {
             try {
                 const employees = await getData(`${process.env.REACT_APP_API_URL}/items`);
-                setData(employees);
+                setData(employees.staff || []);
                 setError(null);
             } catch (err) {
                 setError(err.message);
@@ -46,14 +46,18 @@ const Home = () => {
             {error && <p className="error">{error}</p>}
 
             <ul>
-                {data.map(item => (
-                    <li key={item.id}>
-                        <Link to={`/detail/${item.id}`}>{item.name}</Link>
-                        <button className="delete" onClick={() => deleteItem(item.id)} style={{ marginLeft: "10px" }}>
-                            Удалить
-                        </button>
-                    </li>
-                ))}
+                {data.length > 0 ? (
+                    data.map(item => (
+                        <li key={item.id}>
+                            <Link to={`/detail/${item.id}`}>{item.name}</Link>
+                            <button className="delete" onClick={() => deleteItem(item.id)} style={{ marginLeft: "10px" }}>
+                                Удалить
+                            </button>
+                        </li>
+                    ))
+                ) : (
+                    <p>Сотрудников не найдено. Добавьте первого сотрудника.</p>
+                )}
             </ul>
         </div>
     );

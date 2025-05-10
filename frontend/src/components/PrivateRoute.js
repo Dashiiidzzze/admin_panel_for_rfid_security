@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 const PrivateRoute = ({ children }) => {
-    const isAuth = localStorage.getItem('auth') === 'true'; // Проверяем, залогинен ли пользователь
+    const isAuth = !!localStorage.getItem('token'); // Проверяем, есть ли токен у пользователя
     return isAuth ? children : <Navigate to="/login" />;
 };
 

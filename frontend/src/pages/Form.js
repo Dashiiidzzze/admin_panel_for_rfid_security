@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { postData } from '../components/CheckErrors';
+import { getData, postData } from '../components/CheckErrors';
 
 const Form = () => {
     const navigate = useNavigate();
-
+    // состоние для должностей
+    const [positions, setPositions] = useState([]);
     // Состояние для всех полей формы
     const [formData, setFormData] = useState({
         name: "",
@@ -13,8 +14,8 @@ const Form = () => {
         keyNumber: "",
         zone: {
             flightZone: false,
-            cleanZone: false,
-            runway: false,
+            clearZone: false,
+            runaway: false,
             baggageZone: false,
             controlTower: false
         }
@@ -23,10 +24,27 @@ const Form = () => {
     // Состояние для ошибки валидации
     const [phoneError, setPhoneError] = useState("");
 
+    useEffect(() => {
+        // загрузка списка должностей с API при монтировании компонента
+        const fetchPositions = async () => {
+            try {
+                const data = await getData(`${process.env.REACT_APP_API_URL}/api/positions`);
+                // Преобразуем массив объектов в массив строк с названиями должностей
+                const positionNames = data.dolzhnosti.map(d => d.dolzhnost);
+                setPositions(positionNames); 
+            } catch (error) {
+                console.error("Ошибка при получении списка должностей:", error);
+            }
+        };
+
+        fetchPositions();
+    }, []);
+
     //проверка номера телефона
     const validatePhone = (phone) => {
-        const phoneRegex = /^\+?\d{11}$/;
-        return phoneRegex.test(phone);
+        const cleaned = phone.trim().replace(/\s+/g, '');
+        const phoneRegex = /^\+7\d{10}$/;
+        return phoneRegex.test(cleaned);
     }
 
     // Обработчик изменения полей ввода
@@ -58,10 +76,12 @@ const Form = () => {
     // Отправка данных на сервер
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const cleanedPhone = formData.phone.trim();
         
         // Валидация телефона
-        if (!validatePhone(formData.phone)) {
-            setPhoneError("Неверный формат номера телефона. Пример: +79231335943");
+        if (!validatePhone(cleanedPhone)) {
+            setPhoneError("Формат телефона должен быть: +7XXXXXXXXXX (11 цифр)");
             return;
         }
         
@@ -88,13 +108,9 @@ const Form = () => {
                         Должность:
                         <select name="position" value={formData.position} onChange={handleChange} required>
                             <option value="">Выберите должность</option>
-                            <option value="Пилот">Пилот</option>
-                            <option value="Стюардесса">Стюардесса</option>
-                            <option value="Деспетчер">Деспетчер</option>
-                            <option value="Охранник">Охранник</option>
-                            <option value="Грузчик">Грузчик</option>
-                            <option value="Уборщик">Уборщик</option>
-                            <option value="Досмотрщик">Досмотрщик</option>
+                            {positions.map((pos, index) => (
+                                <option key={index} value={pos}>{pos}</option>
+                            ))}
                         </select>
                     </label>
                     <br />
@@ -112,7 +128,6 @@ const Form = () => {
                             }}
 
                         />
-                        
                     </label>
                     {phoneError && <div style={{color: 'red', fontSize: '0.8em', marginTop: '5px'}}>{phoneError}</div>}
                     <br />
@@ -135,7 +150,7 @@ const Form = () => {
                     <br />
                     <label>
                         Чистая зона:
-                        <select value={formData.zone.cleanZone} onChange={(e) => handleZoneChange(e, "cleanZone")}>
+                        <select value={formData.zone.clearZone} onChange={(e) => handleZoneChange(e, "clearZone")}>
                             <option value="true">Да</option>
                             <option value="false">Нет</option>
                         </select>
@@ -143,7 +158,7 @@ const Form = () => {
                     <br />
                     <label>
                         Взлетно-посадочная полоса:
-                        <select value={formData.zone.runway} onChange={(e) => handleZoneChange(e, "runway")}>
+                        <select value={formData.zone.runaway} onChange={(e) => handleZoneChange(e, "runaway")}>
                             <option value="true">Да</option>
                             <option value="false">Нет</option>
                         </select>

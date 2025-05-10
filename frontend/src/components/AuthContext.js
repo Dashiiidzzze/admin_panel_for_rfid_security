@@ -3,25 +3,29 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('auth'));
+    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
 
+    // Проверка токена при инициализации
     useEffect(() => {
-        const checkAuth = () => {
-            setIsAuthenticated(!!localStorage.getItem('auth'));
-        };
-
-        window.addEventListener('storage', checkAuth); // Следим за изменениями в localStorage
-
-        return () => window.removeEventListener('storage', checkAuth);
+        const token = localStorage.getItem('token');
+        setIsAuthenticated(!!token);
     }, []);
 
-    const login = () => {
-        localStorage.setItem('auth', 'true');
-        setIsAuthenticated(true);
-    };
+    // Синхронизация между вкладками
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const token = localStorage.getItem('token');
+            setIsAuthenticated(!!token);
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        return () => window.removeEventListener('storage', handleStorageChange);
+    }, []);
+
+    const login = () => setIsAuthenticated(true);
 
     const logout = () => {
-        localStorage.removeItem('auth');
+        localStorage.removeItem('token');
         setIsAuthenticated(false);
     };
 
