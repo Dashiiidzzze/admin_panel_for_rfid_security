@@ -1,0 +1,30 @@
+name: Staff Endpoints CI
+
+on:
+  push:
+    paths:
+      - 'resr_api/internal/http-server/handlers/staff/**'
+  pull_request:
+    paths:
+      - 'resr_api/internal/http-server/handlers/staff/**'
+
+jobs:
+  test-staff-endpoints:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+      
+      - name: Install dependencies
+        run: |
+          go mod download
+          go mod tidy
+
+      - name: Run Unit Tests
+        run: |
+          cd internal/http-server/handlers/staff
+          go test -v .
