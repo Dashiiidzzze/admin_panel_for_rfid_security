@@ -64,7 +64,7 @@ func ReadCard(log *slog.Logger, storage StaffGetter) http.HandlerFunc {
 			slog.String("op", op),
 		)
 
-		log.Info(op + " получен запрос на карточку сотрудника")
+		log.Info("получен запрос на карточку сотрудника")
 
 		// Получаем id из URL
 		idStr := chi.URLParam(r, "id")

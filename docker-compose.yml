@@ -18,14 +18,9 @@ services:
     build:
       context: ./rest_api             # Путь к Dockerfile
     ports:
-      #- "8080:8080"                  # Проброс порта для API
       - "${API_PORT}:${API_PORT}"                  # Проброс порта для веб-приложения
-    #env_file:
-    #  - local.env
     volumes:
       - ./rest_api/config/local.yaml:/rest_api/config/local.yaml
-      #- ./config:/config         # монтируем папку для просмотра внутри контейнера
-      #- ./frontend:/frontend
     environment:
       - CONFIG_PATH=${CONFIG_PATH}
       - DB_HOST=${DB_HOST}
@@ -44,8 +39,6 @@ services:
 
   db:
     image: postgres:alpine           # Готовый образ PostgreSQL для Alpine
-    #env_file:
-    #  - local.env
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}  # Указываем пароль для суперпользователя
       - POSTGRES_USER=${DB_USER}          # Пользователь базы данных
@@ -54,8 +47,8 @@ services:
       - "15432:5432"                  # Проброс порта для PostgreSQL
     volumes:
       - db_data:/var/lib/postgresql/data # Том для хранения данных
-      #- ./init_db:/docker-entrypoint-initdb.d # все скрипты из этой папки должны выполняться
-    #restart: always                  # Перезапуск при сбое
+      - ./init_db:/docker-entrypoint-initdb.d # все скрипты из этой папки должны выполняться
+
     networks:
       - app-network
 

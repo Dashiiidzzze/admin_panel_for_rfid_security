@@ -8,7 +8,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var secret = []byte(os.Getenv("TOKEN_KEY"))
+var secret = []byte(os.Getenv("sDZiQ*kT25b1HVoYhBe4"))
 
 // Генерируем токен
 func GenerateToken(username string) (string, error) {
