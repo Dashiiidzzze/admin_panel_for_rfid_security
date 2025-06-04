@@ -1,30 +1,31 @@
-name: Staff Endpoints CI
+name: Go CI
 
 on:
   push:
-    paths:
-      - 'resr_api/internal/http-server/handlers/staff/**'
+    branches: [ main, master ]
   pull_request:
-    paths:
-      - 'resr_api/internal/http-server/handlers/staff/**'
+    branches: [ main, master ]
 
 jobs:
-  test-staff-endpoints:
+  build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+    # 1. Клонируем репозиторий
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Setup Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-      
-      - name: Install dependencies
-        run: |
-          go mod download
-          go mod tidy
+    # 2. Устанавливаем Go (можно указать нужную версию)
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.21'
+        cache: true
 
-      - name: Run Unit Tests
-        run: |
-          cd internal/http-server/handlers/staff
-          go test -v .
+    # 3. Проверка кода на компиляцию
+    - name: Build
+      run: go build ./...
+
+    # 4. Прогон всех тестов, включая unit-тесты на эндпоинты
+    - name: Run tests
+      run: go test -v ./...
