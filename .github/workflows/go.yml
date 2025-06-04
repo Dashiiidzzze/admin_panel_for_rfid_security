@@ -42,6 +42,7 @@ jobs:
 
       - name: Run go test
         run: go test -v ./...
+        working-directory: rest_api/internal/http-server/handlers/staff
 
       - name: Shutdown Docker Compose
         if: always()
