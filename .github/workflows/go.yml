@@ -38,6 +38,7 @@ jobs:
 
       - name: Run go build
         run: go build ./...
+        working-directory: rest_api
 
       - name: Run go test
         run: go test -v ./...
